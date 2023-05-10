@@ -341,6 +341,10 @@ app.post("/register", function(req, res) {
   const st ={
     id: students.length+1,
     name: req.body.name,
+    dob: "",
+    gender: "",
+    about: "",
+    courses: []
   }
   const facul ={
     id: faculties.length+1,
@@ -366,7 +370,6 @@ app.get("/getStudentNames", function(req, res) {
   for(let i = 0; i<students.length;i++){
     studentNames.push(students[i].name)
   }
-  console.log(studentNames)
   res.send(studentNames);
 });
 
@@ -383,7 +386,25 @@ app.get("/getCourses", function(req, res) {
 });
 
 app.put('/putCourse', (req, res) => {
-  const { courseId, name, code, description, faculty, students } = req.body;
+  const { courseId, name, code, description, faculty, students:studentsArr } = req.body;
+  let st = students.filter(student=>studentsArr.includes(student.name));
+  console.log(st);
+  let arr = st.map(ele=>{
+    let find = ele.courses.find(course=>course===name);
+    if(find){}
+    else{
+      ele.courses.push(name);
+    } 
+  })
+
+  let fac = faculties.filter(student=>faculty.includes(student.name));
+  let arr2 = fac.map(ele=>{
+    let find = ele.courses.find(course=>course===name);
+    if(find){}
+    else{
+      ele.courses.push(name);
+    } 
+  })
 
   const course = courses.find(course => course.courseId === courseId);
   if (course) {
@@ -391,7 +412,7 @@ app.put('/putCourse', (req, res) => {
     course.code = code;
     course.description = description;
     course.faculty = faculty;
-    course.students = students;
+    course.students = studentsArr;
   } else {
     courses.push({
       courseId: courseId,
@@ -399,7 +420,7 @@ app.put('/putCourse', (req, res) => {
       code: code,
       description: description,
       faculty: faculty,
-      students: students
+      students: studentsArr
     });
   }
 
@@ -409,7 +430,7 @@ app.put('/putCourse', (req, res) => {
     code: code,
     description: description,
     faculty: faculty,
-    students: students
+    students: studentsArr
   });
 });
 
@@ -417,30 +438,29 @@ app.put('/putCourse', (req, res) => {
 
 app.get('/getStudents', (req, res) => {
   const page = parseInt(req.query.page) || 1;
-  
   const courses = req.query.course ? req.query.course.split(',') : null;
-  
   const startIndex = (page - 1) * 3;
   const endIndex = startIndex + 2;
-  
+  console.log(courses);
+
   let filteredData = students;
   if (courses) {
     filteredData = students.filter(student => {
-      return student.courses.some(course => courses.includes(course));
+      return student.courses.some(course => courses.includes(course));       
     });
   }
-  
+  console.log(filteredData);
+
   const totalNum = filteredData.length;
-  
   const items = filteredData.slice(startIndex, endIndex + 1);
-  
+
   const response = {
     page: page,
     items: items,
     totalItems: items.length,
     totalNum: totalNum
   };
-  
+
   res.json(response);
 });
 
@@ -459,7 +479,7 @@ app.get('/getFaculties', (req, res) => {
   if (req.query.course) {
     const courses = req.query.course.split(',');
     filteredFaculties = filteredFaculties.filter(faculty => {
-      return courses.every(course => faculty.courses.includes(course));
+      return faculty.courses.some(course => courses.includes(course));       
     });
   }
 
@@ -479,6 +499,12 @@ app.get('/getFaculties', (req, res) => {
 
 app.post('/postStudentDetails', (req, res) => {
   const { name, dob, gender, about } = req.body;
+  let student = students.findIndex(ele=>ele.name===name);
+  student.dob = dob;
+  student.gender = gender;
+  student.about = about;
+
+  
 
   const newStudent = {
     id: students.length + 1,
