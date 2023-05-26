@@ -15,9 +15,9 @@ app.post('/api/endpoint', async (req, res) => {
     if (method === 'GET') {
       axiosResponse = await axios.get(fetchURL,{headers: {authorization : headerValue1}});
     } else if (method === 'POST') {
-      axiosResponse = await axios.post(fetchURL, data,{headers: {authorization : headerValue1}});
+      axiosResponse = await axios.post(fetchURL, JSON.parse(data),{headers: {authorization : headerValue1}});
     } else if (method === 'PUT') {
-      axiosResponse = await axios.put(fetchURL, data,{headers: {authorization : headerValue1}});
+      axiosResponse = await axios.put(fetchURL, JSON.parse(data),{headers: {authorization : headerValue1}});
     } else if (method === 'DELETE') {
       axiosResponse = await axios.delete(fetchURL,{headers: {authorization : headerValue1}});
     }
