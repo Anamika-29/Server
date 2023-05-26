@@ -6,17 +6,22 @@ app.use(cors());
 app.use(express.json());
 
 app.post('/api/endpoint', async (req, res) => {
-  const { method, fetchURL, data } = req.body;
+  const { method, fetchURL, data,headerValue1 } = req.body;
 
   console.log(req.body);
 
   try {
     let axiosResponse;
     if (method === 'GET') {
-      axiosResponse = await axios.get(fetchURL);
+      axiosResponse = await axios.get(fetchURL,{headers: {authorization : headerValue1}});
     } else if (method === 'POST') {
-      axiosResponse = await axios.post(fetchURL, data);
-    } else {
+      axiosResponse = await axios.post(fetchURL, data,{headers: {authorization : headerValue1}});
+    } else if (method === 'PUT') {
+      axiosResponse = await axios.put(fetchURL, data,{headers: {authorization : headerValue1}});
+    } else if (method === 'DELETE') {
+      axiosResponse = await axios.delete(fetchURL,{headers: {authorization : headerValue1}});
+    }
+    else {
       throw new Error('Invalid method');
     }
 
