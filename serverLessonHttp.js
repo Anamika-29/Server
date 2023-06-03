@@ -80,11 +80,10 @@ app.get('/svr/products/:id', function (req, res) {
 
 app.post('/products', function (req, res) {
   let { name, price, category, imgLink, description } = req.body;
-  let price2 = +price;
 
   let sql =
     'INSERT INTO MyStore (category, description, imgLink, name, price) VALUES ($1, $2, $3, $4, $5)';
-  client.query(sql, [category, description, imgLink, name, price2], function (err, result) {
+  client.query(sql, [category, description, imgLink, name, price], function (err, result) {
     if (err) {
       console.log(err);
       res.status(500).send('Error in creating product');
