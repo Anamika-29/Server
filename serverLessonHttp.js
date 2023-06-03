@@ -67,7 +67,7 @@ app.get('/products/:category', function (req, res) {
   });
 });
 
-app.get('/products/:id', function (req, res) {
+app.get('/svr/products/:id', function (req, res) {
   let { id } = req.params;
   let sql = `SELECT * FROM MyStore WHERE id = $1`;
   client.query(sql, [id], function (err, result) {
