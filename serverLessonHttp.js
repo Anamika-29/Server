@@ -81,17 +81,17 @@ app.get('/svr/products/:id', function (req, res) {
 app.post('/products', function (req, res) {
   let { name, price, category, imgLink, description } = req.body;
 
-  let sql =
-    'INSERT INTO MyStore (category, description, imgLink, name, price) VALUES ($1, $2, $3, $4, $5)';
+  let sql = 'INSERT INTO MyStore (category, description, imgLink, name, price) VALUES ($1, $2, $3, $4, $5)';
   client.query(sql, [category, description, imgLink, name, price], function (err, result) {
     if (err) {
       console.log(err);
-      res.status(500).send('Error in creating product');
-    } else {
-      res.status(201).send('Product created successfully');
+      return res.status(500).send('Error in creating product: ' + err.message);
     }
+
+    res.status(201).send('Product created successfully');
   });
 });
+
 
 app.put('/products/:id', function (req, res) {
   let { id } = req.params;
