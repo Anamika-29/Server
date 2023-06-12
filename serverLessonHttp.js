@@ -14,7 +14,7 @@ app.use(function (req, res, next) {
 var users = [
   {
     role: "admin",
-    email: "admin@edufect.com",
+    email: "admin@admin.com",
     password: "admin",
   },
   {
