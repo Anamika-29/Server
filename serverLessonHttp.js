@@ -38,14 +38,25 @@ app.get('/getPics' , (req,res) => {
   res.json(brands);
 })
 
-app.get('/getReview', (req, res) => {
+app.get('/:id/getReview', (req, res) => {
   const page = parseInt(req.query.page) || 1; // Get the page number from the query parameter
   const startIndex = (page - 1) * 7;
   const endIndex = page * 7;
-  const paginatedReviews = reviews.slice(startIndex, endIndex);
+
+  const productId = req.params.id;
+
+  // Filter the reviews array based on the product ID
+  const productReviews = reviews.filter((review) => review.id === productId);
+
+  if (productReviews.length === 0) {
+    return res.status(404).json({ error: 'Product reviews not found' });
+  }
+
+  const paginatedReviews = productReviews.slice(startIndex, endIndex);
 
   res.json(paginatedReviews);
 });
+
 
 
 app.get('/getPincode' , (req,res) => {
