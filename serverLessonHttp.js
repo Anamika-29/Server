@@ -38,9 +38,15 @@ app.get('/getPics' , (req,res) => {
   res.json(brands);
 })
 
-app.get('/getReview' , (req,res) => {
-  res.json(review);
-})
+app.get('/getReview', (req, res) => {
+  const page = parseInt(req.query.page) || 1; // Get the page number from the query parameter
+  const startIndex = (page - 1) * 7;
+  const endIndex = page * 7;
+  const paginatedReviews = reviews.slice(startIndex, endIndex);
+
+  res.json(paginatedReviews);
+});
+
 
 app.get('/getPincode' , (req,res) => {
   res.json(pincode);
