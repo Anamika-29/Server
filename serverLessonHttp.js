@@ -46,7 +46,7 @@ app.get('/:id/getReview', (req, res) => {
   const productId = req.params.id;
 
   // Filter the reviews array based on the product ID
-  const productReviews = reviews.filter((review) => review.id === productId);
+  const productReviews = reviews.filter((review) => review.mobileId === productId);
 
   if (productReviews.length === 0) {
     return res.status(404).json({ error: 'Product reviews not found' });
